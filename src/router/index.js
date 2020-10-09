@@ -1,29 +1,29 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
+
+// 引入路由模块化的文件
+import centerRouter from './routes/center';
+import cinemaRouter from './routes/cinema';
+import filmRouter from './routes/film';
 
 const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-]
+    {
+        path: '/',
+        // 访问根路由跳转到电影页面
+        redirect: '/film',
+    },
+    centerRouter,
+    cinemaRouter,
+    filmRouter,
+];
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes
-})
+    mode: 'history',
+    // 前缀 http://localhost:3000/app/film
+    // base: process.env.BASE_URL,
+    routes,
+});
 
-export default router
+export default router;
