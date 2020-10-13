@@ -1,32 +1,40 @@
 <template>
-    <div class="list">
+    <div class="list scroll" :style="{ height: height + 'px' }">
         <!-- loading导入 -->
-        <Loading v-if="loading"></Loading>
+        <Loading v-if="loading" />
         <!-- 展示数据 -->
-        <div
-            class="item"
-            v-for="(item, index) in list"
-            :key="index"
-            @click="goDetail(item.filmId)"
-        >
-            <div class="left">
-                <img :src="item.poster" />
-            </div>
-            <div class="middle">
-                <div>
-                    {{ item.name }}
-                    <span class="item">{{ item.filmType.name }}</span>
+        <div>
+            <div
+                class="item"
+                v-for="(item, index) in data"
+                :key="index"
+                @click="goDetail(item.filmId)"
+            >
+                <div class="left">
+                    <img :src="item.poster" />
                 </div>
-                <div v-if="type == 1">
-                    <span>观众评分 </span>
-                    <span class="grade">{{ item.grade }}</span>
+                <div class="middle">
+                    <div>
+                        {{ item.name }}
+                        <span class="item">{{ item.filmType.name }}</span>
+                    </div>
+                    <div v-if="type == 2">
+                        <span
+                            >上映日期：
+                            {{ item.premiereAt | parsePremiereAt }}</span
+                        >
+                    </div>
+                    <div v-if="type == 1">
+                        <span>观众评分 </span>
+                        <span class="grade">{{ item.grade }}</span>
+                    </div>
+                    <div>主演：{{ item.actors | parseActors }}</div>
+                    <div>{{ item.nation }} | {{ item.runtime }}分钟</div>
                 </div>
-                <div>主演：{{ item.actors | parseActors }}</div>
-                <div>{{ item.nation }} | {{ item.runtime }}分钟</div>
-            </div>
-            <div class="right">
-                <span v-if="type == 1">购票</span>
-                <span v-else>预购</span>
+                <div class="right">
+                    <span v-if="type == 1">购票</span>
+                    <span v-else>预购</span>
+                </div>
             </div>
         </div>
     </div>
@@ -35,10 +43,20 @@
 <script>
 // loading导入
 import Loading from '@/components/Loading';
+import moment from 'moment';
+import Bscroll from 'better-scroll';
+// 导入请求方法
+import { nowPlayingListData, comingSoonListData } from '@/api/api';
 export default {
     data() {
         return {
             loading: true,
+            height: 0,
+            // bs：保存better-scroll实例结果
+            bs: null,
+            pageNum: 1,
+            flag: true, //控制是否可以继续加载更多
+            data: [], //用来拼数据的
         };
     },
     props: ['list', 'type'],
@@ -46,16 +64,10 @@ export default {
         Loading,
     },
     created() {
+        // 当进入页面后需要将父传子的数据list转交给data
+        this.data = this.list;
         // 判断数据是否获取到，获取到之后就去除loading组件
-        if (this.list.length > 0) {
-            this.loading = false;
-        } else {
-            this.loading = true;
-        }
-    },
-    updated() {
-        // 判断数据是否获取到，获取到之后就去除loading组件
-        if (this.list.length > 0) {
+        if (this.data.length > 0) {
             this.loading = false;
         } else {
             this.loading = true;
@@ -70,11 +82,56 @@ export default {
             });
             return actors;
         },
+        parsePremiereAt: function(value) {
+            // 时间戳的单位是秒，需要乘以1000转化成毫秒进行处理
+            return moment(value * 1000).format('YYYY-MM-DD');
+        },
     },
     methods: {
         goDetail: function(filmId) {
             this.$router.push({ name: 'detail', params: { filmId } });
         },
+        // 获取数据的方法
+        getData: async function() {
+            if (this.flag) {
+                this.pageNum++;
+                // 获取数据
+                if (this.type == 1) {
+                    // 正在热映
+                    var ret = await nowPlayingListData(this.pageNum);
+                } else {
+                    // 即将上映
+                    var ret = await comingSoonListData(this.pageNum);
+                }
+                // 如果当前请求道的数据数量少于10，则说明后面没有数据可以请求，此时需要将标志设置成false
+                if (ret.data.data.films.length < 10) {
+                    this.flag = false;
+                }
+                // 将数据处理好，新增到列表中展示
+                this.data = this.data.concat(ret.data.data.films);
+            }
+        },
+    },
+    mounted() {
+        // 获取可视高度
+        this.height = document.documentElement.clientHeight - 100;
+    },
+    updated() {
+        this.bs = new Bscroll('.scroll', {
+            pullUpLoad: true,
+            pullDownRefresh: true,
+            click: true,
+        });
+        this.bs.on('pullingUp', () => {
+            // 获取数据
+            this.getData();
+            this.bs.finishPullUp();
+        });
+        this.bs.on('pullingDown', () => {
+            // 获取数据
+            this.getData();
+            this.bs.finishPullDown();
+        });
     },
 };
 </script>
@@ -162,5 +219,8 @@ export default {
             }
         }
     }
+}
+.scroll {
+    overflow: hidden;
 }
 </style>

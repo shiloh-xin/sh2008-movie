@@ -3,6 +3,11 @@ import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
 
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch(err => err);
+};
+
 // 引入路由模块化的文件
 import centerRouter from './routes/center';
 import cinemaRouter from './routes/cinema';

@@ -6,6 +6,8 @@ import {
     nowPlayingListUrl,
     comingSoonListUrl,
     movieDetail,
+    cinemaListUrl,
+    cinemaTop,
 } from '@/config/url';
 
 // 请求正在热映的列表数据
@@ -25,4 +27,14 @@ export const movieDetailData = filmId => {
     // 给axios设置请求头
     http.defaults.headers.info = 'info';
     return http.get(movieDetail + filmId);
+};
+
+// 请求电影院的数据
+export const cinemaListData = () => {
+    http.defaults.headers.info = 'cinema';
+    return http.get(cinemaListUrl);
+};
+export const cinemaTopData = () => {
+    http.defaults.headers.info = 'banners';
+    return http.get(cinemaTop);
 };

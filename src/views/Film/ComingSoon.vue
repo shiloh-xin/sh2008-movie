@@ -3,7 +3,7 @@
         <FilmList
             :list="list"
             :type="type"
-            :key="'film' + list.lenth"
+            :key="'film' + list.length"
         ></FilmList>
     </div>
 </template>
@@ -12,7 +12,7 @@
 import { comingSoonListData } from '@/api/api';
 import FilmList from '@/components/FilmList';
 export default {
-    data() {
+    data: () => {
         return {
             pageNum: 1,
             list: [],

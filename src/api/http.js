@@ -18,6 +18,9 @@ axios.interceptors.request.use(
         if (info == 'info') {
             host = 'mall.film-ticket.film.info';
         }
+        if (info == 'banners') {
+            host = 'mall.cfg.cinema.banners';
+        }
         // ......后续如果有其他的数据请求需求，接着写就行
         // 设置请求头
         config.headers = {
@@ -34,4 +37,5 @@ axios.interceptors.request.use(
 );
 
 // 导出封装好的axios，供后续使用
+
 export default axios;

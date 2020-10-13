@@ -24,6 +24,16 @@ Vue.config.productionTip = false;
 // );
 // axios.get('gateway?cityId=110100&pageNum=1&pageSize=10&type=1&k=5301029');
 
+// 使用懒加载
+import VueLazyLoad from 'vue-lazyload';
+Vue.use(VueLazyLoad, {
+    loading:
+        'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1602503911195&di=cacb4928c00f86e302a6967e024be94e&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F464ac755e43f02f80cb4821cbdea95116f02d23b234b8-X6O8RP_fw658',
+});
+
+// 定义事件总线（后续需要使用）
+Vue.prototype.eventBus = new Vue();
+
 new Vue({
     router,
     render: h => h(App),
