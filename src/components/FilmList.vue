@@ -114,7 +114,7 @@ export default {
     },
     mounted() {
         // 获取可视高度
-        this.height = document.documentElement.clientHeight - 100;
+        this.height = document.documentElement.clientHeight - 103;
     },
     updated() {
         this.bs = new Bscroll('.scroll', {

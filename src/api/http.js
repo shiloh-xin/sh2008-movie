@@ -21,6 +21,9 @@ axios.interceptors.request.use(
         if (info == 'banners') {
             host = 'mall.cfg.cinema.banners';
         }
+        if (info == 'city') {
+            host = 'mall.film-ticket.city.list';
+        }
         // ......后续如果有其他的数据请求需求，接着写就行
         // 设置请求头
         config.headers = {

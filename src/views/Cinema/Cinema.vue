@@ -5,7 +5,7 @@
         <div class="header">
             <div class="left">
                 <div class="city">
-                    <span>上海</span>
+                    <span @click="goPosition()">{{ city }}</span>
                     <img
                         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAJCAMAAAAIAYw9AAAAOVBMVEVHcEwZGhsZGxsZGhskJCQaGhwbGxsZHR0ZGhsZGhsZGhsZGhsZHBwaGhsaGhwZGxsaGh0bGxsZGhsAwt9XAAAAEnRSTlMA5Z7pB2scPfrK6NJskn6fcnH7htMrAAAAVElEQVQI11XNOQKAIBAEwQEXl0NQ+/+PNfDucIIabaGbnqyHXQHKfC9zgaABVD8Xr8CQlgw5SVLKkBdJ8gmIZhGY/BUoha9qKwDEz/fJJP3y1i5GB2jVA/F2X5USAAAAAElFTkSuQmCC"
                         width="6px"
@@ -144,6 +144,9 @@ import Loading from '@/components/Loading';
 import { cinemaListData, cinemaTopData } from '@/api/api';
 import Bscroll from 'better-scroll';
 
+import { mapState, mapMutations } from 'vuex';
+import axios from 'axios';
+
 export default {
     data() {
         return {
@@ -170,9 +173,57 @@ export default {
 
         let res = await cinemaTopData();
         this.cinemasTop = res.data.data[0];
+
+        // 定位功能业务逻辑
+        let that = this;
+
+        if (this.city == '全国' || this.city == undefined) {
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        showPosition,
+                        showError
+                    );
+                } else {
+                    alert('浏览器不支持地理定位。');
+                }
+            }
+            // 定位数据获取成功响应
+            function showPosition(position) {
+                var lag = position.coords.longitude; //经度
+                var lat = position.coords.latitude; //纬度
+                axios
+                    .get(`https://api.i-lynn.cn/poi?location=${lag},${lat}`)
+                    .then(ret => {
+                        let addr = ret.data.regeocode.addressComponent.province;
+                        let newAddr = addr.substr(0, 2);
+                        that.$store.commit('setCity', newAddr);
+                        that.$store.commit('getCity', newAddr);
+                    });
+            }
+            // 定位数据获取失败响应
+            function showError(error) {
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        alert('定位失败,用户拒绝请求地理定位');
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        alert('定位失败,位置信息是不可用');
+                        break;
+                    case error.TIMEOUT:
+                        alert('定位失败,请求获取用户位置超时');
+                        break;
+                    case error.UNKNOWN_ERROR:
+                        alert('定位失败,定位系统失效');
+                        break;
+                }
+            }
+
+            getLocation();
+        }
     },
     updated() {
-        this.height = document.documentElement.clientHeight - 100;
+        this.height = document.documentElement.clientHeight - 147;
 
         this.bs = new Bscroll('.scroll', {
             pullUpLoad: true,
@@ -191,6 +242,14 @@ export default {
             let prices = value / 100;
             return prices;
         },
+    },
+    methods: {
+        goPosition: function() {
+            this.$router.push('/city');
+        },
+    },
+    computed: {
+        ...mapState(['city']),
     },
 };
 </script>

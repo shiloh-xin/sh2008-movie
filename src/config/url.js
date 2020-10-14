@@ -16,4 +16,7 @@ export const movieDetail = 'gateway?k=6434202&filmId=';
 export const cinemaListUrl = 'gateway?cityId=310100&ticketFlag=1&k=2156444';
 export const cinemaTop = 'gateway?cityId=310100&k=8369753';
 
+// 城市列表的数据
+export const cityListUrl = 'gateway?k=7357613';
+
 // 后续有其他地址请求，届时再加
