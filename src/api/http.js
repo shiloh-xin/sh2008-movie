@@ -26,11 +26,17 @@ axios.interceptors.request.use(
         }
         // ......后续如果有其他的数据请求需求，接着写就行
         // 设置请求头
-        config.headers = {
-            'X-Client-Info':
-                '{"a":"3000","ch":"1002","v":"5.0.4","e":"16022268312862711666900993","bc":"310100"}',
-            'X-Host': host,
-        };
+        if (config.headers.authorization) {
+            config.headers = {
+                authorization: config.headers.authorization,
+            };
+        } else {
+            config.headers = {
+                'X-Client-Info':
+                    '{"a":"3000","ch":"1002","v":"5.0.4","e":"16022268312862711666900993","bc":"310100"}',
+                'X-Host': host,
+            };
+        }
 
         return config;
     },

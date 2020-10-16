@@ -39,4 +39,23 @@ const router = new VueRouter({
     routes,
 });
 
+// 路由守卫
+router.beforeEach((to, from, next) => {
+    let arr = [
+        // 存储需要登录的页面地址
+        '/cinema',
+    ];
+    if (arr.includes(to.path)) {
+        // 返回真则在数组中（需要登录判断）
+        if (localStorage.getItem('_token')) {
+            next();
+        } else {
+            next({ path: '/login', query: { refer: to.fullPath } });
+        }
+    } else {
+        // 不在（不需要登录判断）
+        next();
+    }
+});
+
 export default router;

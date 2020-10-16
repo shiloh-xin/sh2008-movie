@@ -12,6 +12,7 @@ export default new Vuex.Store({
         city: '全国',
         positionCity: '定位失败',
         // 如果有更多的数据需要存储，接着写就行
+        _token: '',
     },
     // 修改数据（监听），同步程序放这里
     mutations: {
@@ -23,6 +24,10 @@ export default new Vuex.Store({
         },
         getCity: function(state, positionName) {
             state.positionCity = positionName;
+        },
+        updateToken: function(state, _token) {
+            state._token = _token;
+            localStorage.setItem('_token', _token);
         },
         // ......
     },

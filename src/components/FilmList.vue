@@ -164,6 +164,7 @@ export default {
             justify-content: space-between;
             width: 55%;
             padding: 10px 0;
+            margin-right: 5px;
 
             div:nth-of-type(1) {
                 color: #191a1b;
@@ -204,7 +205,6 @@ export default {
             width: 15%;
             display: flex;
             align-items: center;
-            margin-left: 22px;
 
             span {
                 border: 1px solid #ff5f16;
