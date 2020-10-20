@@ -1,12 +1,26 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
+import AMap from 'vue-amap';
+
+Vue.use(AMap);
+// 初始化vue-amap
+AMap.initAMapApiLoader({
+    // 高德key
+    key: '37e71ca9e458fc11c8c1914f1335ddea',
+    // 插件集合 （插件按需引入）
+    plugin: ['AMap.Geolocation'],
+    v: '1.4.4',
+});
 
 // 引入element ui
 import ElementUI from 'element-ui';
 import 'element-ui/lib/locale/lang/en';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
+
+var VueTouch = require('vue-touch');
+Vue.use(VueTouch, { name: 'v-touch' });
 
 Vue.config.productionTip = false;
 

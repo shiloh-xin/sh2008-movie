@@ -24,6 +24,15 @@ axios.interceptors.request.use(
         if (info == 'city') {
             host = 'mall.film-ticket.city.list';
         }
+        if (info == 'cinemaInfo') {
+            host = 'mall.film-ticket.cinema.info';
+        }
+        if (info == 'showFilm') {
+            host = 'mall.film-ticket.film.cinema-show-film';
+        }
+        if (info == 'seat') {
+            host = 'mall.film-ticket.schedule.list';
+        }
         // ......后续如果有其他的数据请求需求，接着写就行
         // 设置请求头
         if (config.headers.authorization) {

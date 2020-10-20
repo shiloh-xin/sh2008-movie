@@ -16,6 +16,7 @@ import detailRouter from './routes/detail';
 import cityRouter from './routes/city';
 import vuexRouter from './routes/vuex';
 import loginRouter from './routes/login';
+import cinemaDetail from './routes/cinemaDetail';
 
 const routes = [
     {
@@ -30,6 +31,7 @@ const routes = [
     cityRouter,
     vuexRouter,
     loginRouter,
+    cinemaDetail,
 ];
 
 const router = new VueRouter({

@@ -1,42 +1,44 @@
 <template>
     <div class="list scroll" :style="{ height: height + 'px' }">
-        <!-- loading导入 -->
-        <Loading v-if="loading" />
-        <!-- 展示数据 -->
-        <div>
-            <div
-                class="item"
-                v-for="(item, index) in data"
-                :key="index"
-                @click="goDetail(item.filmId)"
-            >
-                <div class="left">
-                    <img :src="item.poster" />
-                </div>
-                <div class="middle">
-                    <div>
-                        {{ item.name }}
-                        <span class="item">{{ item.filmType.name }}</span>
+        <v-touch v-on:swipeleft="onSwipeLeft">
+            <!-- loading导入 -->
+            <Loading v-if="loading" />
+            <!-- 展示数据 -->
+            <div>
+                <div
+                    class="item"
+                    v-for="(item, index) in data"
+                    :key="index"
+                    @click="goDetail(item.filmId)"
+                >
+                    <div class="left">
+                        <img :src="item.poster" />
                     </div>
-                    <div v-if="type == 2">
-                        <span
-                            >上映日期：
-                            {{ item.premiereAt | parsePremiereAt }}</span
-                        >
+                    <div class="middle">
+                        <div>
+                            {{ item.name }}
+                            <span class="item">{{ item.filmType.name }}</span>
+                        </div>
+                        <div v-if="type == 2">
+                            <span
+                                >上映日期：
+                                {{ item.premiereAt | parsePremiereAt }}</span
+                            >
+                        </div>
+                        <div v-if="type == 1">
+                            <span>观众评分 </span>
+                            <span class="grade">{{ item.grade }}</span>
+                        </div>
+                        <div>主演：{{ item.actors | parseActors }}</div>
+                        <div>{{ item.nation }} | {{ item.runtime }}分钟</div>
                     </div>
-                    <div v-if="type == 1">
-                        <span>观众评分 </span>
-                        <span class="grade">{{ item.grade }}</span>
+                    <div class="right">
+                        <span v-if="type == 1">购票</span>
+                        <span v-else>预购</span>
                     </div>
-                    <div>主演：{{ item.actors | parseActors }}</div>
-                    <div>{{ item.nation }} | {{ item.runtime }}分钟</div>
-                </div>
-                <div class="right">
-                    <span v-if="type == 1">购票</span>
-                    <span v-else>预购</span>
                 </div>
             </div>
-        </div>
+        </v-touch>
     </div>
 </template>
 
@@ -77,9 +79,11 @@ export default {
     filters: {
         parseActors: function(value) {
             let actors = '';
-            value.forEach(element => {
-                actors += element.name + ' ';
-            });
+            if (value) {
+                value.forEach(element => {
+                    actors += element.name + ' ';
+                });
+            }
             return actors;
         },
         parsePremiereAt: function(value) {
@@ -96,12 +100,19 @@ export default {
             if (this.flag) {
                 this.pageNum++;
                 // 获取数据
+                let cityId = localStorage.getItem('clickId');
+                if (cityId == null || cityId == undefined) {
+                    cityId = localStorage.getItem('cityId');
+                    if (cityId == '310113') {
+                        cityId = '310100';
+                    }
+                }
                 if (this.type == 1) {
                     // 正在热映
-                    var ret = await nowPlayingListData(this.pageNum);
+                    var ret = await nowPlayingListData(this.pageNum, cityId);
                 } else {
                     // 即将上映
-                    var ret = await comingSoonListData(this.pageNum);
+                    var ret = await comingSoonListData(this.pageNum, cityId);
                 }
                 // 如果当前请求道的数据数量少于10，则说明后面没有数据可以请求，此时需要将标志设置成false
                 if (ret.data.data.films.length < 10) {
@@ -109,7 +120,11 @@ export default {
                 }
                 // 将数据处理好，新增到列表中展示
                 this.data = this.data.concat(ret.data.data.films);
+                console.log(this.data);
             }
+        },
+        onSwipeLeft() {
+            this.$router.push({ path: '/cinema' });
         },
     },
     mounted() {

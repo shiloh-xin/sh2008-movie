@@ -9,9 +9,9 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         count: 0,
-        city: '全国',
         positionCity: '定位失败',
         // 如果有更多的数据需要存储，接着写就行
+        showCity: '全国',
         _token: '',
     },
     // 修改数据（监听），同步程序放这里
@@ -19,16 +19,31 @@ export default new Vuex.Store({
         add: function(state, step) {
             state.count += step;
         },
+
         setCity: function(state, cityName) {
-            state.city = cityName;
+            localStorage.setItem('clickName', cityName);
+            state.showCity = cityName;
         },
-        getCity: function(state, positionName) {
-            state.positionCity = positionName;
+        // 获取定位的城市名
+        getCityName: function(state, cityName) {
+            localStorage.setItem('cityName', cityName);
+            state.positionCity = cityName;
         },
         updateToken: function(state, _token) {
-            state._token = _token;
             localStorage.setItem('_token', _token);
+            state._token = _token;
         },
+        // 获取定位的城市ID，并存储在localStorage中
+        getCityId: function(state, cityId) {
+            localStorage.setItem('cityId', cityId);
+            state.cityId = cityId;
+        },
+        // 获取城市列表点击的城市ID，并存储在localStorage中
+        clickCityId: function(state, cityId) {
+            localStorage.setItem('clickId', cityId);
+            state.clickCityId = cityId;
+        },
+
         // ......
     },
     // 异步程序放这里

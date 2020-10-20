@@ -20,7 +20,14 @@ export default {
         };
     },
     async mounted() {
-        let ret = await comingSoonListData(this.pageNum);
+        let cityId = localStorage.getItem('clickId');
+        if (cityId == null || cityId == undefined) {
+            cityId = localStorage.getItem('cityId');
+            if (cityId == '310113') {
+                cityId = '310100';
+            }
+        }
+        let ret = await comingSoonListData(this.pageNum, cityId);
         this.list = ret.data.data.films;
     },
     components: {

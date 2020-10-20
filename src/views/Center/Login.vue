@@ -100,23 +100,27 @@ export default {
                         // 登录成功(存储token，跳转)
                         this.$store.commit('updateToken', ret.data.data._token);
                         if (this.$route.query.refer) {
-                            this.$router.push({
-                                path: this.$route.query.refer,
+                            Dialog.alert({
+                                message: '登录成功',
+                                theme: 'round-button',
+                            }).then(() => {
+                                this.$router.push({
+                                    path: this.$route.query.refer,
+                                });
                             });
                         } else {
-                            this.$router.push({ path: '/center' });
+                            Dialog.alert({
+                                message: '登录成功',
+                                theme: 'round-button',
+                            }).then(() => {
+                                this.$router.push({ path: '/center' });
+                            });
                         }
-                        // Dialog.alert({
-                        //     message: '登录成功',
-                        //     theme: 'round-button',
-                        // }).then(() => {
-                        //     this.$router.push({ path: '/center' });
-                        // });
                     } else {
                         // 登录失败
                         Dialog.alert({
                             title: '登录失败',
-                            message: '请重新登录',
+                            message: '请检查账号密码后，重新登录！',
                         }).then(() => {
                             // on close
                         });

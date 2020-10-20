@@ -1,106 +1,104 @@
 <template>
     <div class="list ">
-        <!-- Loading导入 -->
-        <Loading v-if="loading"></Loading>
-        <div class="header">
-            <div class="left">
-                <div class="city">
-                    <span @click="goPosition()">{{ city }}</span>
-                    <img
-                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAJCAMAAAAIAYw9AAAAOVBMVEVHcEwZGhsZGxsZGhskJCQaGhwbGxsZHR0ZGhsZGhsZGhsZGhsZHBwaGhsaGhwZGxsaGh0bGxsZGhsAwt9XAAAAEnRSTlMA5Z7pB2scPfrK6NJskn6fcnH7htMrAAAAVElEQVQI11XNOQKAIBAEwQEXl0NQ+/+PNfDucIIabaGbnqyHXQHKfC9zgaABVD8Xr8CQlgw5SVLKkBdJ8gmIZhGY/BUoha9qKwDEz/fJJP3y1i5GB2jVA/F2X5USAAAAAElFTkSuQmCC"
-                        width="6px"
-                        height="3px"
-                    />
-                </div>
-            </div>
-            <div class="title">
-                <div>影院</div>
-            </div>
-            <div class="right">
-                <div>
-                    <div class="toCinemaSearch">
+        <v-touch v-on:swipeleft="onSwipeLeft" v-on:swiperight="onSwipeRight">
+            <div class="header">
+                <div class="left">
+                    <div class="city">
+                        <span @click="goPosition()">{{ city }}</span>
+
                         <img
-                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADUAAAA2CAMAAABQrCHsAAABlVBMVEVHcEwaGh8/Pz8ZGxszMzMZGhwZGhsZGhsZGhsZGhscHBwnJycZGhskJCQaGh0fHx8ZGhsaGiMeHh4ZGhsZGhsbGxsZJiYaGhsZGhsZGhwZGhwZGxsZGxsaGhsfHx8ZGhsbGxsqKioaGhsbGxsZGxsbGxsZGhwaGh8ZGhskJCQZGxsZHh4ZGxsZGhsaGh0aGhsZGhsZMzMaGh0ZGhseHh4ZGhsZGhseHh4ZGhsZGhsZHh4aGh0aGhsZGhwbGxsaGh4ZIiIbGxsZGhwbGxsZGxsaGh1/f38aGhsZGxshISEZGxsZGxsZGhsZGhwfHx8aGh4aGhsdHR0ZGxv///8ZGhsqKioaGhwbGxtVVVUaGhwbGxsaGh8ZGhsZGxsaGhwZGxsaGhwaGhwgICAiIiIcHBwZGhsZGxsbGxsZGhsZGxsaGhwbGxsZGhsaGiAZGhwaGhsZGxsaGhwZGxsZGhwaGhsZHBwaGhwZHBwaGhwaGh0aGh0ZGhwbGxsaGh0aGhoZGhwaGiEZGxsZHBwZHR0aGhsaGhsZGhsIL5M3AAAAhnRSTlMAOQTsBeP76P73SA3qB2kY+B0i/fRBFKbfx62elq8QtzgG11V5L70w/BXOO6DeV6T2CnLwKsDWIenVMla5mUo6HhysQs9NAsSXF4uE06IITJwjggHMDFhxA5BAMd3Zj52Iah8PG/JmUuCDfS7LJ7aSqXVl0etQYlp8X2i+JXtz0CZ6Wzy4w4GfxwoAAAJjSURBVBgZrcEFUxQBAIbh77qL7m4ElFCxCQWDUFBQaaXDwu56f7cwzHLHsXe7N+Pz6D9pfPehovJvZcWHd42yx1n4uISkkseFTlmZejRHurlHU8pqaJpDruLN6Nvfb6ObxS4OTQ8pM/dVDoQXnszKMPtkIcyBq25lUNQHFDwI6aTQgwKgr0imejuArphOi3UBHb0yEfNAS7fMdbeAJ6ZTIqXQE1QmwR4ojSjdGHgLlVmhF8aU5hfwSdlEgfc6IVICo8puFEpqlWoGfA+V3UMfzCjFMxdEZSUKrmdKWoN5p6w452FNSXuwLGvLsKdjoTj+57L23E88JEM97MiOHaiX4QVsyY4teCFDGazLjnUok6EUamSHA0pl2IAV2bECGzLEISI7IhCXYR+KZEcR7MvwBrZlxza8keEPBGVHEKplKIfXsuM1lMvwCl7KjpfwSoZdWK2VtdpV2NWxOgjKWhDqlLQExbJWDEtKegr+Zllp9sNTpRiEK7JyBQaV6ocXrim7a+D9ohMqwJWnbPJcUKGTWj3QH1JmoX7wtCrNpbNQfU6ZnKuGs5d0ymWgLSFziTbgskx8BXztMtPuAy7myczHOOSfuaF0N87kgx/CDplx+IDAnftKdf9OAPB9C0CgU2YSlRy6d9dx+5akW7cdd+9xqDKhmjD4G2Tq+ghHvJ7vHi9HRq7rwIXzQLlbpm6WFZCqoOymjlQ1AZ+rZG58YnLYlw/k+4YnJ8Z1zL0I1OUpM+dA44BT6Rr8EHYoV/UBCHQqVzUXwf9TubpwHih3K0dVTUCTWzlyLwLvlbOGlkCzctca0z9q9NKFAyAIHQAAAABJRU5ErkJggg=="
-                            width="18px"
-                            height="18px"
-                            alt=""
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAJCAMAAAAIAYw9AAAAOVBMVEVHcEwZGhsZGxsZGhskJCQaGhwbGxsZHR0ZGhsZGhsZGhsZGhsZHBwaGhsaGhwZGxsaGh0bGxsZGhsAwt9XAAAAEnRSTlMA5Z7pB2scPfrK6NJskn6fcnH7htMrAAAAVElEQVQI11XNOQKAIBAEwQEXl0NQ+/+PNfDucIIabaGbnqyHXQHKfC9zgaABVD8Xr8CQlgw5SVLKkBdJ8gmIZhGY/BUoha9qKwDEz/fJJP3y1i5GB2jVA/F2X5USAAAAAElFTkSuQmCC"
+                            width="6px"
+                            height="3px"
                         />
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="cinema-list-tag">
-            <div class="cinema-list-tag-name">
-                <label class="">
-                    全城
-                    <img
-                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAJCAMAAAAIAYw9AAAANlBMVEVHcEz/Xxb/Xxb/Xxf/Xxb/bST/ZBv/YBn/Xxb/Xxf/Xxf/Xxb/YBb/Xxb/YBb/YBb/YRb/XxYVPc+mAAAAEXRSTlMA5Z7SygccPfpr6OmSfp9ycXeG0lYAAABPSURBVAjXVY05EsAgDMTM4Zgzif7/2RTABFTtqNCKDCwEk4OcIOVNqAcAr8tcEYgRiNfMFMCr3kCxM7NWB+o8swp0cX9hVJ08run23dz7ASR9A7q9wA9qAAAAAElFTkSuQmCC"
-                        width="6px"
-                        height="3px"
-                        style="display: none;"/>
-                    <img
-                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAJCAMAAAAIAYw9AAAAOVBMVEVHcEwZGhsZGxsZGhskJCQaGhwbGxsZHR0ZGhsZGhsZGhsZGhsZHBwaGhsaGhwZGxsaGh0bGxsZGhsAwt9XAAAAEnRSTlMA5Z7pB2scPfrK6NJskn6fcnH7htMrAAAAVElEQVQI11XNOQKAIBAEwQEXl0NQ+/+PNfDucIIabaGbnqyHXQHKfC9zgaABVD8Xr8CQlgw5SVLKkBdJ8gmIZhGY/BUoha9qKwDEz/fJJP3y1i5GB2jVA/F2X5USAAAAAElFTkSuQmCC"
-                        width="6px"
-                        height="3px"
-                /></label>
-
-                <label class="">
-                    APP订票
-                    <img
-                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAJCAMAAAAIAYw9AAAANlBMVEVHcEz/Xxb/Xxb/Xxf/Xxb/bST/ZBv/YBn/Xxb/Xxf/Xxf/Xxb/YBb/Xxb/YBb/YBb/YRb/XxYVPc+mAAAAEXRSTlMA5Z7SygccPfpr6OmSfp9ycXeG0lYAAABPSURBVAjXVY05EsAgDMTM4Zgzif7/2RTABFTtqNCKDCwEk4OcIOVNqAcAr8tcEYgRiNfMFMCr3kCxM7NWB+o8swp0cX9hVJ08run23dz7ASR9A7q9wA9qAAAAAElFTkSuQmCC"
-                        width="6px"
-                        height="3px"
-                        style="display: none;"/>
-                    <img
-                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAJCAMAAAAIAYw9AAAAOVBMVEVHcEwZGhsZGxsZGhskJCQaGhwbGxsZHR0ZGhsZGhsZGhsZGhsZHBwaGhsaGhwZGxsaGh0bGxsZGhsAwt9XAAAAEnRSTlMA5Z7pB2scPfrK6NJskn6fcnH7htMrAAAAVElEQVQI11XNOQKAIBAEwQEXl0NQ+/+PNfDucIIabaGbnqyHXQHKfC9zgaABVD8Xr8CQlgw5SVLKkBdJ8gmIZhGY/BUoha9qKwDEz/fJJP3y1i5GB2jVA/F2X5USAAAAAElFTkSuQmCC"
-                        width="6px"
-                        height="3px"
-                /></label>
-
-                <label class="">
-                    最近去过
-                    <img
-                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAJCAMAAAAIAYw9AAAANlBMVEVHcEz/Xxb/Xxb/Xxf/Xxb/bST/ZBv/YBn/Xxb/Xxf/Xxf/Xxb/YBb/Xxb/YBb/YBb/YRb/XxYVPc+mAAAAEXRSTlMA5Z7SygccPfpr6OmSfp9ycXeG0lYAAABPSURBVAjXVY05EsAgDMTM4Zgzif7/2RTABFTtqNCKDCwEk4OcIOVNqAcAr8tcEYgRiNfMFMCr3kCxM7NWB+o8swp0cX9hVJ08run23dz7ASR9A7q9wA9qAAAAAElFTkSuQmCC"
-                        width="6px"
-                        height="3px"
-                        style="display: none;"/>
-                    <img
-                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAJCAMAAAAIAYw9AAAAOVBMVEVHcEwZGhsZGxsZGhskJCQaGhwbGxsZHR0ZGhsZGhsZGhsZGhsZHBwaGhsaGhwZGxsaGh0bGxsZGhsAwt9XAAAAEnRSTlMA5Z7pB2scPfrK6NJskn6fcnH7htMrAAAAVElEQVQI11XNOQKAIBAEwQEXl0NQ+/+PNfDucIIabaGbnqyHXQHKfC9zgaABVD8Xr8CQlgw5SVLKkBdJ8gmIZhGY/BUoha9qKwDEz/fJJP3y1i5GB2jVA/F2X5USAAAAAElFTkSuQmCC"
-                        width="6px"
-                        height="3px"
-                /></label>
-            </div>
-        </div>
-
-        <!-- 列表 -->
-        <div
-            class="cinema-banner-wrap scroll"
-            :style="{ height: height + 'px' }"
-        >
-            <div>
-                <div>
-                    <ul class="cinema-list">
-                        <li class="cinema-banner-item">
-                            <div class="name">
-                                <span class="title">{{
-                                    cinemasTop.masterTitle
-                                }}</span>
-                                <span
-                                    class="icon"
-                                    v-if="cinemasTop.length !== 0"
-                                    >影院券</span
-                                >
-                            </div>
-                            <div class="type">
-                                {{ cinemasTop.name }}
-                            </div>
-                        </li>
-                    </ul>
+                <div class="title">
+                    <div>影院</div>
                 </div>
+                <div class="right">
+                    <div>
+                        <div class="toCinemaSearch">
+                            <img
+                                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADUAAAA2CAMAAABQrCHsAAABlVBMVEVHcEwaGh8/Pz8ZGxszMzMZGhwZGhsZGhsZGhsZGhscHBwnJycZGhskJCQaGh0fHx8ZGhsaGiMeHh4ZGhsZGhsbGxsZJiYaGhsZGhsZGhwZGhwZGxsZGxsaGhsfHx8ZGhsbGxsqKioaGhsbGxsZGxsbGxsZGhwaGh8ZGhskJCQZGxsZHh4ZGxsZGhsaGh0aGhsZGhsZMzMaGh0ZGhseHh4ZGhsZGhseHh4ZGhsZGhsZHh4aGh0aGhsZGhwbGxsaGh4ZIiIbGxsZGhwbGxsZGxsaGh1/f38aGhsZGxshISEZGxsZGxsZGhsZGhwfHx8aGh4aGhsdHR0ZGxv///8ZGhsqKioaGhwbGxtVVVUaGhwbGxsaGh8ZGhsZGxsaGhwZGxsaGhwaGhwgICAiIiIcHBwZGhsZGxsbGxsZGhsZGxsaGhwbGxsZGhsaGiAZGhwaGhsZGxsaGhwZGxsZGhwaGhsZHBwaGhwZHBwaGhwaGh0aGh0ZGhwbGxsaGh0aGhoZGhwaGiEZGxsZHBwZHR0aGhsaGhsZGhsIL5M3AAAAhnRSTlMAOQTsBeP76P73SA3qB2kY+B0i/fRBFKbfx62elq8QtzgG11V5L70w/BXOO6DeV6T2CnLwKsDWIenVMla5mUo6HhysQs9NAsSXF4uE06IITJwjggHMDFhxA5BAMd3Zj52Iah8PG/JmUuCDfS7LJ7aSqXVl0etQYlp8X2i+JXtz0CZ6Wzy4w4GfxwoAAAJjSURBVBgZrcEFUxQBAIbh77qL7m4ElFCxCQWDUFBQaaXDwu56f7cwzHLHsXe7N+Pz6D9pfPehovJvZcWHd42yx1n4uISkkseFTlmZejRHurlHU8pqaJpDruLN6Nvfb6ObxS4OTQ8pM/dVDoQXnszKMPtkIcyBq25lUNQHFDwI6aTQgwKgr0imejuArphOi3UBHb0yEfNAS7fMdbeAJ6ZTIqXQE1QmwR4ojSjdGHgLlVmhF8aU5hfwSdlEgfc6IVICo8puFEpqlWoGfA+V3UMfzCjFMxdEZSUKrmdKWoN5p6w452FNSXuwLGvLsKdjoTj+57L23E88JEM97MiOHaiX4QVsyY4teCFDGazLjnUok6EUamSHA0pl2IAV2bECGzLEISI7IhCXYR+KZEcR7MvwBrZlxza8keEPBGVHEKplKIfXsuM1lMvwCl7KjpfwSoZdWK2VtdpV2NWxOgjKWhDqlLQExbJWDEtKegr+Zllp9sNTpRiEK7JyBQaV6ocXrim7a+D9ohMqwJWnbPJcUKGTWj3QH1JmoX7wtCrNpbNQfU6ZnKuGs5d0ymWgLSFziTbgskx8BXztMtPuAy7myczHOOSfuaF0N87kgx/CDplx+IDAnftKdf9OAPB9C0CgU2YSlRy6d9dx+5akW7cdd+9xqDKhmjD4G2Tq+ghHvJ7vHi9HRq7rwIXzQLlbpm6WFZCqoOymjlQ1AZ+rZG58YnLYlw/k+4YnJ8Z1zL0I1OUpM+dA44BT6Rr8EHYoV/UBCHQqVzUXwf9TubpwHih3K0dVTUCTWzlyLwLvlbOGlkCzctca0z9q9NKFAyAIHQAAAABJRU5ErkJggg=="
+                                width="18px"
+                                height="18px"
+                                alt=""
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cinema-list-tag">
+                <div class="cinema-list-tag-name">
+                    <label class="">
+                        全城
+                        <img
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAJCAMAAAAIAYw9AAAANlBMVEVHcEz/Xxb/Xxb/Xxf/Xxb/bST/ZBv/YBn/Xxb/Xxf/Xxf/Xxb/YBb/Xxb/YBb/YBb/YRb/XxYVPc+mAAAAEXRSTlMA5Z7SygccPfpr6OmSfp9ycXeG0lYAAABPSURBVAjXVY05EsAgDMTM4Zgzif7/2RTABFTtqNCKDCwEk4OcIOVNqAcAr8tcEYgRiNfMFMCr3kCxM7NWB+o8swp0cX9hVJ08run23dz7ASR9A7q9wA9qAAAAAElFTkSuQmCC"
+                            width="6px"
+                            height="3px"
+                            style="display: none;"/>
+                        <img
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAJCAMAAAAIAYw9AAAAOVBMVEVHcEwZGhsZGxsZGhskJCQaGhwbGxsZHR0ZGhsZGhsZGhsZGhsZHBwaGhsaGhwZGxsaGh0bGxsZGhsAwt9XAAAAEnRSTlMA5Z7pB2scPfrK6NJskn6fcnH7htMrAAAAVElEQVQI11XNOQKAIBAEwQEXl0NQ+/+PNfDucIIabaGbnqyHXQHKfC9zgaABVD8Xr8CQlgw5SVLKkBdJ8gmIZhGY/BUoha9qKwDEz/fJJP3y1i5GB2jVA/F2X5USAAAAAElFTkSuQmCC"
+                            width="6px"
+                            height="3px"
+                    /></label>
+
+                    <label class="">
+                        APP订票
+                        <img
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAJCAMAAAAIAYw9AAAANlBMVEVHcEz/Xxb/Xxb/Xxf/Xxb/bST/ZBv/YBn/Xxb/Xxf/Xxf/Xxb/YBb/Xxb/YBb/YBb/YRb/XxYVPc+mAAAAEXRSTlMA5Z7SygccPfpr6OmSfp9ycXeG0lYAAABPSURBVAjXVY05EsAgDMTM4Zgzif7/2RTABFTtqNCKDCwEk4OcIOVNqAcAr8tcEYgRiNfMFMCr3kCxM7NWB+o8swp0cX9hVJ08run23dz7ASR9A7q9wA9qAAAAAElFTkSuQmCC"
+                            width="6px"
+                            height="3px"
+                            style="display: none;"/>
+                        <img
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAJCAMAAAAIAYw9AAAAOVBMVEVHcEwZGhsZGxsZGhskJCQaGhwbGxsZHR0ZGhsZGhsZGhsZGhsZHBwaGhsaGhwZGxsaGh0bGxsZGhsAwt9XAAAAEnRSTlMA5Z7pB2scPfrK6NJskn6fcnH7htMrAAAAVElEQVQI11XNOQKAIBAEwQEXl0NQ+/+PNfDucIIabaGbnqyHXQHKfC9zgaABVD8Xr8CQlgw5SVLKkBdJ8gmIZhGY/BUoha9qKwDEz/fJJP3y1i5GB2jVA/F2X5USAAAAAElFTkSuQmCC"
+                            width="6px"
+                            height="3px"
+                    /></label>
+
+                    <label class="">
+                        最近去过
+                        <img
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAJCAMAAAAIAYw9AAAANlBMVEVHcEz/Xxb/Xxb/Xxf/Xxb/bST/ZBv/YBn/Xxb/Xxf/Xxf/Xxb/YBb/Xxb/YBb/YBb/YRb/XxYVPc+mAAAAEXRSTlMA5Z7SygccPfpr6OmSfp9ycXeG0lYAAABPSURBVAjXVY05EsAgDMTM4Zgzif7/2RTABFTtqNCKDCwEk4OcIOVNqAcAr8tcEYgRiNfMFMCr3kCxM7NWB+o8swp0cX9hVJ08run23dz7ASR9A7q9wA9qAAAAAElFTkSuQmCC"
+                            width="6px"
+                            height="3px"
+                            style="display: none;"/>
+                        <img
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAJCAMAAAAIAYw9AAAAOVBMVEVHcEwZGhsZGxsZGhskJCQaGhwbGxsZHR0ZGhsZGhsZGhsZGhsZHBwaGhsaGhwZGxsaGh0bGxsZGhsAwt9XAAAAEnRSTlMA5Z7pB2scPfrK6NJskn6fcnH7htMrAAAAVElEQVQI11XNOQKAIBAEwQEXl0NQ+/+PNfDucIIabaGbnqyHXQHKfC9zgaABVD8Xr8CQlgw5SVLKkBdJ8gmIZhGY/BUoha9qKwDEz/fJJP3y1i5GB2jVA/F2X5USAAAAAElFTkSuQmCC"
+                            width="6px"
+                            height="3px"
+                    /></label>
+                </div>
+            </div>
+
+            <!-- 列表 -->
+            <div class="cinema-banner-wrap">
+                <!-- Loading导入 -->
+                <Loading v-if="loading"></Loading>
+                <ul class="cinema-list">
+                    <li
+                        class="cinema-banner-item"
+                        v-for="(items, indexs) in cinemasTop"
+                        :key="indexs"
+                    >
+                        <div class="name">
+                            <span class="title">{{ items.name }}</span>
+                            <span class="icon" v-if="cinemasTop.length !== 0"
+                                >影院券</span
+                            >
+                        </div>
+                        <div class="type">
+                            {{ items.masterTitle }}
+                        </div>
+                    </li>
+                </ul>
+
                 <div
                     class="cinema-list-wrap"
                     v-for="(item, index) in cinemas"
                     :key="index"
+                    @click="goCinemaDetail(item.cinemaId)"
                 >
                     <ul>
                         <li>
@@ -135,18 +133,21 @@
                     </ul>
                 </div>
             </div>
-        </div>
+        </v-touch>
     </div>
 </template>
 
 <script>
 import Loading from '@/components/Loading';
-import { cinemaListData, cinemaTopData } from '@/api/api';
+import { cinemaListData, cinemaTopData, userInfo } from '@/api/api';
 import Bscroll from 'better-scroll';
+import Vue from 'vue';
+import { Dialog } from 'vant';
+import 'vant/lib/index.css';
+Vue.use(Dialog);
 
 import { mapState, mapMutations } from 'vuex';
 import axios from 'axios';
-
 export default {
     data() {
         return {
@@ -155,88 +156,43 @@ export default {
             loading: true,
             bs: null,
             height: 0,
+            city: '',
         };
     },
     components: {
         Loading,
     },
-    created() {
+    async mounted() {
+        let cityId = localStorage.getItem('cityId');
+        cityId = localStorage.getItem('clickId');
+        if (cityId == null || cityId == '310113') {
+            cityId = '310100';
+        }
+
+        // 获取请求的结果循环展示到页面
+        let res = await cinemaTopData(cityId);
+        this.cinemasTop = res.data.data;
+
+        let ret = await cinemaListData(cityId);
+        this.cinemas = ret.data.data.cinemas;
+
+        // 判断loading
         if (this.cinemas.length > 0) {
             this.loading = false;
         } else {
             this.loading = true;
         }
-    },
-    async mounted() {
-        let ret = await cinemaListData();
-        this.cinemas = ret.data.data.cinemas;
 
-        let res = await cinemaTopData();
-        this.cinemasTop = res.data.data[0];
+        var cityName = localStorage.getItem('cityName');
+        var clickName = localStorage.getItem('clickName');
 
-        // 定位功能业务逻辑
-        let that = this;
-
-        if (this.city == '全国' || this.city == undefined) {
-            function getLocation() {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        showPosition,
-                        showError
-                    );
-                } else {
-                    alert('浏览器不支持地理定位。');
-                }
-            }
-            // 定位数据获取成功响应
-            function showPosition(position) {
-                var lag = position.coords.longitude; //经度
-                var lat = position.coords.latitude; //纬度
-                axios
-                    .get(`https://api.i-lynn.cn/poi?location=${lag},${lat}`)
-                    .then(ret => {
-                        let addr = ret.data.regeocode.addressComponent.province;
-                        let newAddr = addr.substr(0, 2);
-                        that.$store.commit('setCity', newAddr);
-                        that.$store.commit('getCity', newAddr);
-                    });
-            }
-            // 定位数据获取失败响应
-            function showError(error) {
-                switch (error.code) {
-                    case error.PERMISSION_DENIED:
-                        alert('定位失败,用户拒绝请求地理定位');
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        alert('定位失败,位置信息是不可用');
-                        break;
-                    case error.TIMEOUT:
-                        alert('定位失败,请求获取用户位置超时');
-                        break;
-                    case error.UNKNOWN_ERROR:
-                        alert('定位失败,定位系统失效');
-                        break;
-                }
-            }
-
-            getLocation();
+        if (clickName == null) {
+            this.city = cityName;
+        } else {
+            this.city = clickName;
         }
     },
-    updated() {
-        this.height = document.documentElement.clientHeight - 147;
 
-        this.bs = new Bscroll('.scroll', {
-            pullUpLoad: true,
-            pullDownRefresh: true,
-            click: true,
-        });
-        this.bs.on('pullingUp', () => {
-            this.bs.finishPullUp();
-        });
-        this.bs.on('pullingDown', () => {
-            this.bs.finishPullDown();
-        });
-    },
     filters: {
         price: function(value) {
             let prices = value / 100;
@@ -244,20 +200,74 @@ export default {
         },
     },
     methods: {
+        ...mapMutations(['getCityId', 'getCityName', 'setCity']),
         goPosition: function() {
             this.$router.push('/city');
         },
+        getLocation() {
+            let _this = this;
+            AMap.plugin('AMap.Geolocation', function() {
+                var geolocation = new AMap.Geolocation({
+                    // 是否使用高精度定位，默认：true
+                    enableHighAccuracy: true,
+                    // 设置定位超时时间，默认：无穷大
+                    timeout: 5000,
+                });
+                geolocation.getCurrentPosition();
+                AMap.event.addListener(geolocation, 'complete', onComplete);
+                AMap.event.addListener(geolocation, 'error', onError);
+                // data是具体的定位信息
+                function onComplete(data) {
+                    let cityId = data.addressComponent.adcode;
+                    let cityName = data.addressComponent.province.substr(0, 2);
+
+                    _this.getCityId(cityId);
+                    _this.getCityName(cityName);
+
+                    if (
+                        localStorage.getItem('clickName') == null ||
+                        localStorage.getItem('clickName') == 'undefined'
+                    ) {
+                        _this.city = cityName;
+                    } else {
+                        _this.city = localStorage.getItem('clickName');
+                    }
+                }
+                function onError(data) {
+                    // 失败 启用 ip定位
+                    AMap.plugin('AMap.CitySearch', function() {
+                        var citySearch = new AMap.CitySearch();
+                        citySearch.getLocalCity(function(status, result) {
+                            if (status === 'complete' && result.info === 'OK') {
+                                // 查询成功，result即为当前所在城市信息
+                                console.log('通过ip获取当前城市：', result);
+                            }
+                        });
+                        return;
+                    });
+                }
+            });
+        },
+        onSwipeLeft() {
+            this.$router.push({ path: '/center' });
+        },
+        onSwipeRight() {
+            this.$router.push({ path: '/film' });
+        },
+        goCinemaDetail(cinemaId) {
+            this.$router.push({ name: 'cinemaDetail', params: { cinemaId } });
+        },
     },
     computed: {
-        ...mapState(['city']),
+        ...mapState(['showCity']),
+    },
+    created() {
+        this.getLocation();
     },
 };
 </script>
 
 <style lang="scss" scoped>
-.scroll {
-    overflow: hidden;
-}
 .list {
     margin-bottom: 51px;
     padding-top: 95px;
@@ -272,9 +282,9 @@ export default {
     overflow: hidden;
     margin: 0;
     padding: 0;
-    z-index: 50;
     background-color: #fff;
     display: flex;
+    z-index: 50;
 
     .left {
         min-width: 15%;
@@ -309,8 +319,6 @@ export default {
         text-align: center;
         font-size: 17px;
         color: #191a1b;
-        -webkit-box-flex: 1;
-        -ms-flex: 1;
         flex: 1;
         overflow: hidden;
     }
@@ -363,6 +371,7 @@ export default {
 
 .cinema-banner-wrap {
     border-top: 1px solid #ededed;
+    overflow-x: hidden;
 
     .cinema-list {
         list-style: none;
@@ -371,8 +380,8 @@ export default {
 
         li {
             padding: 15px;
-            position: relative;
             background-color: #fff;
+            position: relative;
 
             .name {
                 font-size: 15px;

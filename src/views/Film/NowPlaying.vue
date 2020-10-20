@@ -23,7 +23,14 @@ export default {
         };
     },
     async mounted() {
-        let ret = await nowPlayingListData(this.pageNum);
+        let cityId = localStorage.getItem('clickId');
+        if (cityId == null || cityId == undefined) {
+            cityId = localStorage.getItem('cityId');
+            if (cityId == '310113') {
+                cityId = '310100';
+            }
+        }
+        let ret = await nowPlayingListData(this.pageNum, cityId);
         this.list = ret.data.data.films;
     },
     components: {

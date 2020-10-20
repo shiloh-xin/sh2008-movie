@@ -2,9 +2,23 @@
     <div class="box">
         <div class="header">
             <div class="left">
-                <van-icon class="icon" name="cross" @click="chooseCity()" />
+                <van-icon
+                    class="icon"
+                    name="cross"
+                    v-if="bool != ''"
+                    @click="chooseCity()"
+                />
+                <van-icon
+                    class="icon"
+                    name="cross"
+                    v-else
+                    @click="chooseCity1()"
+                />
             </div>
-            <div class="title">当前城市 -</div>
+            <div class="title" v-if="positionCity != '定位失败'">
+                当前城市 - {{ positionCity || position }}
+            </div>
+            <div class="title" v-else>当前城市 - {{ position }}</div>
         </div>
         <div class="search-city-input">
             <div class="input-wrap">
@@ -17,54 +31,58 @@
             </div>
         </div>
 
-        <van-index-bar
-            :index-list="indexList"
-            style="margin-top:93px"
-            class="list"
-        >
-            <div class="recommend-city">
-                <div class="gprs-city">
-                    <div class="city-index-title">
-                        GPS定位你所在城市
+        <div class="list-parents">
+            <van-index-bar
+                :index-list="indexList"
+                style="margin-top:93px"
+                class="list"
+            >
+                <div class="recommend-city">
+                    <div class="gprs-city">
+                        <div class="city-index-title">
+                            GPS定位你所在城市
+                        </div>
+                        <ul class="city-index-detail cleanfix">
+                            <li class="city-item-detail city-item-detail-gprs">
+                                <div class="city-item-text">
+                                    {{ position }}
+                                </div>
+                            </li>
+                        </ul>
                     </div>
-                    <ul class="city-index-detail cleanfix">
-                        <li class="city-item-detail city-item-detail-gprs">
-                            <div class="city-item-text">{{ positionCity }}</div>
-                        </li>
-                    </ul>
+                    <div class="hot-city">
+                        <div class="city-index-title">热门城市</div>
+                        <ul class="city-index-detail cleanfix">
+                            <li class="city-item-detail">
+                                <div class="city-item-text">北京</div>
+                            </li>
+                            <li class="city-item-detail">
+                                <div class="city-item-text">上海</div>
+                            </li>
+                            <li class="city-item-detail">
+                                <div class="city-item-text">广州</div>
+                            </li>
+                            <li class="city-item-detail">
+                                <div class="city-item-text">深圳</div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="hot-city">
-                    <div class="city-index-title">热门城市</div>
-                    <ul class="city-index-detail cleanfix">
-                        <li class="city-item-detail">
-                            <div class="city-item-text">北京</div>
-                        </li>
-                        <li class="city-item-detail">
-                            <div class="city-item-text">上海</div>
-                        </li>
-                        <li class="city-item-detail">
-                            <div class="city-item-text">广州</div>
-                        </li>
-                        <li class="city-item-detail">
-                            <div class="city-item-text">深圳</div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <template v-for="(item, index) in dataList">
-                <van-index-anchor
-                    style="background:#F4F4F4"
-                    :index="item.index"
-                    :key="index"
-                />
-                <van-cell
-                    v-for="(v, k) in item.data"
-                    :title="v.name"
-                    :key="k"
-                    @click="chooseCity(v.name)"
-                />
-            </template>
-        </van-index-bar>
+                <template v-for="(item, index) in dataList">
+                    <van-index-anchor
+                        style="background:#F4F4F4"
+                        :index="item.index"
+                        :key="index"
+                    />
+                    <van-cell
+                        v-for="(v, k) in item.data"
+                        :title="v.name"
+                        :key="k"
+                        @click="chooseCity(v.name, v.cityId)"
+                    />
+                </template>
+            </van-index-bar>
+        </div>
     </div>
 </template>
 
@@ -73,7 +91,7 @@ import { cityListData } from '@/api/api';
 import Vue from 'vue';
 import 'vant/lib/index.css';
 import { IndexBar, IndexAnchor, Cell, Icon } from 'vant';
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 
 Vue.use(IndexBar);
 Vue.use(IndexAnchor);
@@ -84,6 +102,8 @@ export default {
         return {
             dataList: [],
             indexList: [],
+            position: '',
+            bool: '',
         };
     },
     // 进入的时候去掉底部导航
@@ -98,11 +118,18 @@ export default {
         let ret = await cityListData(); //dataList, indexList
         this.dataList = ret[0];
         this.indexList = ret[1];
+        this.position = localStorage.getItem('cityName');
     },
     methods: {
-        chooseCity: function(cityName) {
+        ...mapMutations(['setCity', 'clickCityId']),
+        chooseCity: function(cityName, id) {
             // 将数据写到vuex中
-            this.$store.commit('setCity', cityName);
+            this.bool = cityName;
+            this.clickCityId(id);
+            this.setCity(cityName);
+            this.$router.push('/cinema');
+        },
+        chooseCity1: function() {
             this.$router.push('/cinema');
         },
     },
@@ -113,6 +140,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.list-parents {
+    overflow-x: hidden;
+}
 .box {
     .header {
         position: fixed;

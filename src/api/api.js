@@ -12,20 +12,23 @@ import {
     cityListUrl,
     loginUrl,
     centerUrl,
+    cinemaDetail,
+    cinemaDetailFilm,
+    cinemaFilmList,
 } from '@/config/url';
 
 // 请求正在热映的列表数据
-export const nowPlayingListData = pageNum => {
+export const nowPlayingListData = (pageNum, cityId) => {
     http.defaults.headers.info = 'film';
     http.defaults.headers.authorization = '';
-    return http.get(nowPlayingListUrl + pageNum);
+    return http.get(nowPlayingListUrl + pageNum + '&cityId=' + cityId);
 };
 
 // 请求即将上映的列表数据
-export const comingSoonListData = pageNum => {
+export const comingSoonListData = (pageNum, cityId) => {
     http.defaults.headers.info = 'film';
     http.defaults.headers.authorization = '';
-    return http.get(comingSoonListUrl + pageNum);
+    return http.get(comingSoonListUrl + pageNum + '&cityId=' + cityId);
 };
 
 // 请求电影详情的数据
@@ -37,17 +40,31 @@ export const movieDetailData = filmId => {
 };
 
 // 请求电影院的数据
-export const cinemaListData = () => {
+export const cinemaListData = ID => {
     http.defaults.headers.info = 'cinema';
     http.defaults.headers.authorization = '';
 
-    return http.get(cinemaListUrl);
+    return http.get(cinemaListUrl + ID);
 };
-export const cinemaTopData = () => {
+export const cinemaTopData = ID => {
     http.defaults.headers.info = 'banners';
     http.defaults.headers.authorization = '';
 
-    return http.get(cinemaTop);
+    return http.get(cinemaTop + ID);
+};
+
+// 请求电影院详情的数据
+export const cinemaDetailData = cinemaId => {
+    http.defaults.headers.info = 'cinemaInfo';
+    return http.get(cinemaDetail + cinemaId);
+};
+export const cinemaDetailFilmData = cinemaId => {
+    http.defaults.headers.info = 'showFilm';
+    return http.get(cinemaDetailFilm + cinemaId);
+};
+export const cinemaFilmListData = (cinemaId, filmId) => {
+    http.defaults.headers.info = 'seat';
+    return http.get(cinemaFilmList + cinemaId + '&filmId=' + filmId);
 };
 
 // 请求城市列表的数据
@@ -94,7 +111,7 @@ export const userInfo = _token => {
     http.defaults.headers.authorization = _token;
     // 响应拦截器
     // http.interceptors.response.use(
-    //     function(response) {
+    //     function(re5 sponse) {
     //         response.data.user_info.gender = response.data.user_info.gender
     //             ? '女'
     //             : '男';
