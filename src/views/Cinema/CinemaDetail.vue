@@ -324,6 +324,7 @@ export default {
                             time[0]
                         );
                         _this.cinemaFilm = req.data.data.schedules;
+                        _this.active = 0;
                     },
                 },
             });
