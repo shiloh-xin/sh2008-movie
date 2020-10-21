@@ -299,7 +299,6 @@ export default {
                 spaceBetween: 30,
                 centeredSlides: true,
                 slideToClickedSlide: true,
-                centeredSlides: true,
                 coverflowEffect: {
                     rotate: 0,
                     stretch: 0,
@@ -334,7 +333,7 @@ export default {
             'scroll',
             e => {
                 let top = document.documentElement.scrollTop;
-                if (top > 30 * 2) {
+                if (top > 50 * 2) {
                     // 吸顶
                     this.fixed = true;
                 } else {
@@ -364,8 +363,9 @@ export default {
         },
         async onClick(event) {
             // 点击切换时间，发起第三次请求
-            let int = this.timeList[event];
-            let req = await cinemaFilmListData(
+            var int = this.timeList[0].time[event];
+
+            var req = await cinemaFilmListData(
                 this.$route.params.cinemaId,
                 this.filmId,
                 int
@@ -724,11 +724,11 @@ body {
     transform: scaleY(0.5);
 }
 .cinema-schedule .schedule-wrap .schedule-list {
-    min-height: calc(100vh - 44px);
+    padding-bottom: 50px;
 }
 .cinema-schedule .schedule-wrap .schedule-list .schedule-item {
     height: 60px;
-    padding: 15px;
+    padding: 7px 15px;
     position: relative;
     background: #fff;
 }
