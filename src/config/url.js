@@ -19,7 +19,7 @@ export const cinemaTop = 'gateway?k=8369753&cityId=';
 // 电影院详情
 export const cinemaDetail = 'gateway/?k=3512815&cinemaId=';
 export const cinemaDetailFilm = 'gateway/?k=8956618&cinemaId=';
-export const cinemaFilmList = 'gateway/?date=1603123200&k=6503121&cinemaId=';
+export const cinemaFilmList = 'gateway/?k=6503121&cinemaId=';
 
 // 城市列表的数据
 export const cityListUrl = 'gateway?k=7357613';

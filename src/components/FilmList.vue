@@ -120,7 +120,6 @@ export default {
                 }
                 // 将数据处理好，新增到列表中展示
                 this.data = this.data.concat(ret.data.data.films);
-                console.log(this.data);
             }
         },
         onSwipeLeft() {

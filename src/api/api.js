@@ -62,9 +62,11 @@ export const cinemaDetailFilmData = cinemaId => {
     http.defaults.headers.info = 'showFilm';
     return http.get(cinemaDetailFilm + cinemaId);
 };
-export const cinemaFilmListData = (cinemaId, filmId) => {
+export const cinemaFilmListData = (cinemaId, filmId, date) => {
     http.defaults.headers.info = 'seat';
-    return http.get(cinemaFilmList + cinemaId + '&filmId=' + filmId);
+    return http.get(
+        cinemaFilmList + cinemaId + '&filmId=' + filmId + '&date=' + date
+    );
 };
 
 // 请求城市列表的数据

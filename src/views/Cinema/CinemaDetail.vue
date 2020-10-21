@@ -142,9 +142,11 @@
                                         v-for="(item, index) in timeList"
                                         :key="index"
                                     >
-                                        <van-tabs v-model="active">
+                                        <van-tabs
+                                            v-model="active"
+                                            @click="onClick($event)"
+                                        >
                                             <van-tab
-                                                v-model="color"
                                                 v-for="(v, k) in timeList[index]
                                                     .time"
                                                 :key="k"
@@ -159,143 +161,40 @@
                             </div>
                             <div class="schedule-list">
                                 <div>
-                                    <div class="disable schedule-item">
+                                    <div
+                                        class="schedule-item"
+                                        v-for="(item, index) in cinemaFilm"
+                                        :key="index"
+                                    >
                                         <div class="left">
                                             <div class="start-at">
-                                                15:55
+                                                {{ item.showAt | showEndAt }}
                                             </div>
                                             <div class="end-at">
-                                                18:28散场
+                                                {{ item.endAt | showEndAt }}散场
                                             </div>
                                         </div>
                                         <div class="middle">
                                             <div class="language">
-                                                国语2D
+                                                {{ item.filmLanguage
+                                                }}{{ item.imagery }}
                                             </div>
                                             <div class="hall">
-                                                6号厅
+                                                {{ item.hallName }}
                                             </div>
                                         </div>
                                         <div class="right">
                                             <div class="buy-ticket">
-                                                停售
+                                                {{
+                                                    item.isOnsell == true
+                                                        ? '购票'
+                                                        : '停售'
+                                                }}
                                             </div>
                                             <div class="lowest-price">
                                                 <span class="price-icon"
                                                     >￥</span
-                                                >43
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="schedule-item">
-                                        <div class="left">
-                                            <div class="start-at">
-                                                18:00
-                                            </div>
-                                            <div class="end-at">
-                                                20:33散场
-                                            </div>
-                                        </div>
-                                        <div class="middle">
-                                            <div class="language">
-                                                国语2D
-                                            </div>
-                                            <div class="hall">
-                                                7号VIP厅
-                                            </div>
-                                        </div>
-                                        <div class="right">
-                                            <div class="buy-ticket">
-                                                购票
-                                            </div>
-                                            <div class="lowest-price">
-                                                <span class="price-icon"
-                                                    >￥</span
-                                                >88
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="schedule-item">
-                                        <div class="left">
-                                            <div class="start-at">
-                                                19:00
-                                            </div>
-                                            <div class="end-at">
-                                                21:33散场
-                                            </div>
-                                        </div>
-                                        <div class="middle">
-                                            <div class="language">
-                                                国语2D
-                                            </div>
-                                            <div class="hall">
-                                                6号厅
-                                            </div>
-                                        </div>
-                                        <div class="right">
-                                            <div class="buy-ticket">
-                                                购票
-                                            </div>
-                                            <div class="lowest-price">
-                                                <span class="price-icon"
-                                                    >￥</span
-                                                >53
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="schedule-item">
-                                        <div class="left">
-                                            <div class="start-at">
-                                                20:55
-                                            </div>
-                                            <div class="end-at">
-                                                23:28散场
-                                            </div>
-                                        </div>
-                                        <div class="middle">
-                                            <div class="language">
-                                                国语2D
-                                            </div>
-                                            <div class="hall">
-                                                7号VIP厅
-                                            </div>
-                                        </div>
-                                        <div class="right">
-                                            <div class="buy-ticket">
-                                                购票
-                                            </div>
-                                            <div class="lowest-price">
-                                                <span class="price-icon"
-                                                    >￥</span
-                                                >88
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="schedule-item">
-                                        <div class="left">
-                                            <div class="start-at">
-                                                21:55
-                                            </div>
-                                            <div class="end-at">
-                                                00:28散场
-                                            </div>
-                                        </div>
-                                        <div class="middle">
-                                            <div class="language">
-                                                国语2D
-                                            </div>
-                                            <div class="hall">
-                                                6号厅
-                                            </div>
-                                        </div>
-                                        <div class="right">
-                                            <div class="buy-ticket">
-                                                购票
-                                            </div>
-                                            <div class="lowest-price">
-                                                <span class="price-icon"
-                                                    >￥</span
-                                                >43
+                                                >{{ item.salePrice / 100 }}
                                             </div>
                                         </div>
                                     </div>
@@ -366,9 +265,10 @@ export default {
             fixed: false,
             timeList: [],
             active: 0,
-            color: 'blue',
+            time: [],
         };
     },
+
     async mounted() {
         let ret = await cinemaDetailData(this.$route.params.cinemaId);
         this.detail = ret.data.data.cinema;
@@ -376,11 +276,16 @@ export default {
         let res = await cinemaDetailFilmData(this.$route.params.cinemaId);
         this.film = res.data.data.films;
 
-        // let red = await cinemaFilmListData(
-        //     this.$route.params.cinemaId,
-        //     this.filmId
-        // );
-        // console.log(red);
+        // 页面一上来默认展示 发起第一次请求
+        this.filmId = this.film[0].filmId;
+        this.timeList = this.film[0].showDate;
+
+        let req = await cinemaFilmListData(
+            this.$route.params.cinemaId,
+            this.filmId,
+            this.timeList[0]
+        );
+        this.cinemaFilm = req.data.data.schedules;
 
         // 页面加载完展示第一个轮播图对应的数据
         this.filmId = this.film[0].filmId;
@@ -404,12 +309,22 @@ export default {
                 },
 
                 on: {
-                    slideChange: function() {
+                    slideChange: async function() {
                         _this.filmId = _this.film[this.activeIndex].filmId;
 
                         let bgc = _this.$refs.src[this.activeIndex].src;
                         let res = `url(${bgc})`;
                         _this.$refs.srb.style.backgroundImage = res;
+
+                        // 点击或者切换轮播图，对应展示数据跟随变动，发起第二次请求
+                        let time = _this.film[this.activeIndex].showDate;
+
+                        let req = await cinemaFilmListData(
+                            _this.$route.params.cinemaId,
+                            _this.filmId,
+                            time[0]
+                        );
+                        _this.cinemaFilm = req.data.data.schedules;
                     },
                 },
             });
@@ -430,6 +345,7 @@ export default {
             true
         );
     },
+
     methods: {
         touchSwiper: function(id) {
             this.filmId = id;
@@ -446,6 +362,16 @@ export default {
         goDetail: function(filmId) {
             this.$router.push({ name: 'detail', params: { filmId } });
         },
+        async onClick(event) {
+            // 点击切换时间，发起第三次请求
+            let int = this.timeList[event];
+            let req = await cinemaFilmListData(
+                this.$route.params.cinemaId,
+                this.filmId,
+                int
+            );
+            this.cinemaFilm = req.data.data.schedules;
+        },
     },
     filters: {
         parseActors: function(value) {
@@ -459,6 +385,9 @@ export default {
         },
         parsePremiereAt: function(value) {
             return moment(value * 1000).format('ddd MM月DD日');
+        },
+        showEndAt: function(value) {
+            return moment(value * 1000).format('H:mm');
         },
     },
     watch: {
@@ -824,13 +753,13 @@ body {
     margin-top: 12px;
 }
 .cinema-schedule .schedule-wrap .schedule-list .schedule-item .left .start-at {
-    font-size: 15px;
+    font-size: 16px;
     color: #191a1b;
 }
 .cinema-schedule .schedule-wrap .schedule-list .schedule-item .left .end-at {
     font-size: 13px;
     color: #797d82;
-    margin-top: 2px;
+    margin-top: 4px;
 }
 .cinema-schedule .schedule-wrap .schedule-list .schedule-item .middle {
     float: left;
