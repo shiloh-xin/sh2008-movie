@@ -47,7 +47,7 @@
                     :key="index"
                     class="swiper-slide"
                 >
-                    <img :src="item.avatarAddress" alt="" />
+                    <img v-lazy="item.avatarAddress" alt="" />
                     <span class="actors-name">{{ item.name }}</span>
                     <span class="actors-role">{{ item.role }}</span>
                 </div>
@@ -62,7 +62,7 @@
                     :key="index"
                     class="swiper-slide"
                 >
-                    <img :src="item" alt="" />
+                    <img v-lazy="item" alt="" />
                 </div>
             </Swiper>
         </div>
@@ -232,7 +232,7 @@ export default {
             font-size: 13px;
             color: #797d82;
             margin-top: 4px;
-            max-height: 150px;
+            max-height: 250px;
             overflow: hidden;
         }
         .film-detail-all:nth-of-type(5) {

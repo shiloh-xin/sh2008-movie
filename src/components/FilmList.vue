@@ -12,7 +12,7 @@
                     @click="goDetail(item.filmId)"
                 >
                     <div class="left">
-                        <img :src="item.poster" />
+                        <img v-lazy="item.poster" />
                     </div>
                     <div class="middle">
                         <div>

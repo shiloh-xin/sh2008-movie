@@ -83,7 +83,7 @@
                                             >
                                                 <div class="img-wrap">
                                                     <img
-                                                        :src="item.poster"
+                                                        v-lazy="item.poster"
                                                         alt=""
                                                         ref="src"
                                                     />
